@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#PBS -N HiSat2_transcripts_poa_annua
+#PBS -l nodes=1:ppn=70,mem=501gb
+#PBS -d /data/run/maheym/poa_annua
+#PBS -M maheymoh@msu.edu
+#PBS -m abe
+
+module load HISAT2
+module load SAMTools
+
+list=$(cat samples.list)
+for file in $list;
+do
+  	hisat2 -p 70 --quiet \
+               -x /data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.index \
+               -1 /data/run/maheym/poa_annua/raw_data/${file}_1.fq.gz \
+               -2 /data/run/maheym/poa_annua/raw_data/${file}_2.fq.gz \
+               -S /data/run/maheym/poa_annua/Poa.maker.transcripts_${file}.sam 
+        samtools view -hb -@ 35 Poa.maker.transcripts_${file}.sam | samtools sort -@ 35 \
+         -o /data/run/maheym/poa_annua/poa_transcripts/Poa.maker.transcripts_${file}.bam
+        samtools index /data/run/maheym/poa_annua/poa_transcripts/Poa.maker.transcripts_${file}.bam
+        rm Poa.maker.transcripts_${file}.sam
+done
+
+
+
