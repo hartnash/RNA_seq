@@ -15,4 +15,8 @@ Here, we have 6 populations in which 3 are resistant and 3 are susceptible to th
 3. fastp - for removing adapter sequences and quality check of raw fastq files
 Shifu Chen, Yanqing Zhou, Yaru Chen, Jia Gu; fastp: an ultra-fast all-in-one FASTQ preprocessor, Bioinformatics, Volume 34, Issue 17, 1 September 2018, Pages i884–i890, https://doi.org/10.1093/bioinformatics/bty560
 
+4. EdgeR - for making comparisons between different populations and getting differentially expressed genes.
+http://bioconductor.org/packages/devel/bioc/vignettes/edgeR/inst/doc/edgeRUsersGuide.pdf
+
+
 
