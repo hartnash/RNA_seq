@@ -18,6 +18,12 @@ Shifu Chen, Yanqing Zhou, Yaru Chen, Jia Gu; fastp: an ultra-fast all-in-one FAS
 4. EdgeR - for making comparisons between different populations and getting differentially expressed genes.
 http://bioconductor.org/packages/devel/bioc/vignettes/edgeR/inst/doc/edgeRUsersGuide.pdf
 
+# Procedure
+
+# 1st step - using fastp to trim the adapter sequences and filter low quality reads
+'''
+
+
 
 
 
