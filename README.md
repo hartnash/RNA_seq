@@ -20,8 +20,39 @@ http://bioconductor.org/packages/devel/bioc/vignettes/edgeR/inst/doc/edgeRUsersG
 
 # Procedure
 
-# 1st step - using fastp to trim the adapter sequences and filter low quality reads
+# 1. - using fastp to trim the adapter sequences and filter low quality reads
+fastp is a command-line tool that can trim the adapter sequences, filter low quality reads and provide quality control files for the raw reads. it provides the quality control files in html and json format, to see the quality of the sequences.
+
+## To install fastp
+
 '''
+# Create a conda environment 
+conda create --name fastp
+
+# installing fastp 
+conda install -c bioconda fastp
+'''
+
+## running fastp
+
+to run fastp, use following command
+'''
+fastp -i ${file}_R1.fastq.gz  -I ${file}_R2.fastq.gz -o ${data}/cleaned_files/${file}_R1.fastq -O ${data}/cleaned_files/${file}_R2.fastq -w 64 \
+   --dedup --failed_out ${data}/cleaned_files/fail.fq -j ${data}/cleaned_files/qc/${file}_fastp.json -h ${data}/cleaned_files/qc/${file}_fastp.html 
+'''
+### Meaning of the options used
+
+-i = input of forward strand 
+-I = input of reverse strand
+-o = name of forward strand output file, after filtering 
+-O = name of reverse strand output file, after filtering 
+-w = number of cores to be used (max it can use = 16)
+--dedup = drop duplicated sequences
+--failed_out = file where all the low quality reads are stored
+-j = file name of quality control file in json format
+-h = file name of quality control file in html format
+
+for more information, see [fastp github page](https://github.com/OpenGene/fastp)
 
 
 
