@@ -25,21 +25,22 @@ fastp is a command-line tool that can trim the adapter sequences, filter low qua
 
 ## To install fastp
 
-'''
+```
 # Create a conda environment 
 conda create --name fastp
 
 # installing fastp 
 conda install -c bioconda fastp
-'''
+```
 
 ## running fastp
 
 to run fastp, use following command
-'''
+
+```
 fastp -i ${file}_R1.fastq.gz  -I ${file}_R2.fastq.gz -o ${data}/cleaned_files/${file}_R1.fastq -O ${data}/cleaned_files/${file}_R2.fastq -w 64 \
    --dedup --failed_out ${data}/cleaned_files/fail.fq -j ${data}/cleaned_files/qc/${file}_fastp.json -h ${data}/cleaned_files/qc/${file}_fastp.html 
-'''
+```
 ### Meaning of the options used
 
 -i = input of forward strand 
