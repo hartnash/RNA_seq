@@ -43,9 +43,9 @@ fastp -i ${file}_R1.fastq.gz  -I ${file}_R2.fastq.gz -o ${data}/cleaned_files/${
 ```
 ### Meaning of the options used
 
--i = input of forward strand 
--I = input of reverse strand
--o = name of forward strand output file, after filtering 
+-i = input of forward strand \
+-I = input of reverse strand \
+-o = name of forward strand output file, after filtering  \
 -O = name of reverse strand output file, after filtering 
 -w = number of cores to be used (max it can use = 16)
 --dedup = drop duplicated sequences
