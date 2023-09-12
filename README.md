@@ -51,9 +51,12 @@ fastp -i ${file}_R1.fastq.gz  -I ${file}_R2.fastq.gz -o ${data}/cleaned_files/${
 --dedup = drop duplicated sequences \
 --failed_out = file where all the low quality reads are stored \
 -j = file name of quality control file in json format \
--h = file name of quality control file in html format \
+-h = file name of quality control file in html format 
 
 for more information, see [fastp github page](https://github.com/OpenGene/fastp)
+
+# 2 aligning the raw reads 
+After inital filtering, triming and quality control of the raw reads, next step is to align the raw reads. We used HISAT2 to align the raw reads to the reference transcriptome
 
 
 
