@@ -5,7 +5,7 @@ Differential gene expression analysis done on the resistant and susceptible popu
 Differential gene expression is a technique used to find the up- and down-regulated genes in their expression in an experimental design.
 Here, we have 6 populations in which 3 are resistant and 3 are susceptible to the herbicide indaziflam
 
-# tools used 
+# Tools used 
 1.fastp - for removing adapter sequences and quality check of raw fastq files
 Shifu Chen, Yanqing Zhou, Yaru Chen, Jia Gu; fastp: an ultra-fast all-in-one FASTQ preprocessor, Bioinformatics, Volume 34, Issue 17, 1 September 2018, Pages i884–i890, https://doi.org/10.1093/bioinformatics/bty560
 
@@ -20,7 +20,7 @@ http://bioconductor.org/packages/devel/bioc/vignettes/edgeR/inst/doc/edgeRUsersG
 
 # Procedure
 
-# 1. - using fastp to trim the adapter sequences and filter low quality reads
+# 1. - Trimming and filtering raw reads
 fastp is a command-line tool that can trim the adapter sequences, filter low quality reads and provide quality control files for the raw reads. it provides the quality control files in html and json format, to see the quality of the sequences.
 
 ## To install fastp
@@ -46,12 +46,12 @@ fastp -i ${file}_R1.fastq.gz  -I ${file}_R2.fastq.gz -o ${data}/cleaned_files/${
 -i = input of forward strand \
 -I = input of reverse strand \
 -o = name of forward strand output file, after filtering  \
--O = name of reverse strand output file, after filtering 
--w = number of cores to be used (max it can use = 16)
---dedup = drop duplicated sequences
---failed_out = file where all the low quality reads are stored
--j = file name of quality control file in json format
--h = file name of quality control file in html format
+-O = name of reverse strand output file, after filtering \
+-w = number of cores to be used (max it can use = 16) \
+--dedup = drop duplicated sequences \
+--failed_out = file where all the low quality reads are stored \
+-j = file name of quality control file in json format \
+-h = file name of quality control file in html format \
 
 for more information, see [fastp github page](https://github.com/OpenGene/fastp)
 
