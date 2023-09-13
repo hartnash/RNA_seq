@@ -9,6 +9,10 @@
 module load HISAT2
 module load SAMTools
 
+# Building the trancriptome index 
+hisat2-build -p 64 $data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.cds \
+/data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.index 
+
 list=$(cat samples.list)
 for file in $list;
 do
