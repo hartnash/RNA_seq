@@ -118,6 +118,31 @@ conda install -c bioconda hisat2
 ```
 --------------------------
 
+# 3 Sorting and indexing aligned SAM outputs
+After aligning with HISAT2, the reads are un-sorted. The reads needs to be sorted for downward analysis. after sorting the reads needs to be indexed. The indexing is process of getting the position of the reads in alignment file. Due to large size of the files, indexing helps the softwares to run faster and efficiently. SAM files can go upto 50GB per file, depending on size of your transcriptome. Thus it is better to convert SAM (sequence alignment mapping) to BAM (binary alignement mapping) to save space and run downward analysis faster.
+
+## Converting SAM to BAM and sorting the BAM files
+
+```
+samtools view -hb -@ 35 Poa.maker.transcripts_${file}.sam | samtools sort -@ 35 \
+         -o /data/run/maheym/poa_annua/poa_transcripts/Poa.maker.transcripts_${file}.bam
+```
+
+view = flag to convert SAM to BAM \
+-hb(to flags combined in one, similar to -h, -b) = -h = includes headers, -b - output as BAM \
+| = piping the ouput \
+-@ = number of cores to use \
+-sort = sort the reads in BAM file \ 
+-o = output location for sorted BAM file
+
+## Indexing the BAM files
+After sorting we can index the BAM files. 
+```
+samtools index /data/run/maheym/poa_annua/poa_transcripts/Poa.maker.transcripts_${file}.bam
+        rm Poa.maker.transcripts_${file}.sam
+```
+after converting SAM to BAM, we can remove SAM files to save space. We can always convert BAM to SAM or vice-versa. They are practically the same information, just SAM is in human readable form (text)  while BAM is in binary form. 
+
 
 
 
