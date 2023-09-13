@@ -55,8 +55,73 @@ fastp -i ${file}_R1.fastq.gz  -I ${file}_R2.fastq.gz -o ${data}/cleaned_files/${
 
 for more information, see [fastp github page](https://github.com/OpenGene/fastp)
 
-# 2 aligning the raw reads 
-After inital filtering, triming and quality control of the raw reads, next step is to align the raw reads. We used HISAT2 to align the raw reads to the reference transcriptome
+# 2 Aligning the raw reads 
+After initial filtering, trimming, and quality control of the raw reads, the next step is to align the raw reads. We used HISAT2 to align the raw reads to the reference transcriptome.
+
+## Building the genome index
+Before running the alignment, hisat needs trancriptome to be indexed. 
+
+```
+# Building the trancriptome index 
+hisat2-build -p 64 data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.cds \
+/data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.index 
+```
+where
+-p = number of cores to use \
+data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.cds = location of the trancriptome sequence \
+/data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.index = location and name of indexed transcriptome to be used for alignment
+
+## running the Hisat2 aligner
+To run the aligner, we need
+a. cleaned forward reads (made in previous using fastp)
+b. cleaned reverse reads (made in previous using fastp)
+c. Indexed reference transcriptome to be aligned (if reference transcriptome is unavailable, consider using Trinity for de-novo assemby or Salmon, kallisto for transcript quantification without aligning)
+
+```
+hisat2 -p 70 --quiet \
+               -x /data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.index \
+               -1 /data/run/maheym/poa_annua/raw_data/${file}_1.fq.gz \
+               -2 /data/run/maheym/poa_annua/raw_data/${file}_2.fq.gz \
+               -S /data/run/maheym/poa_annua/Poa.maker.transcripts_${file}.sam
+```
+where
+-p = number of cores to use
+--quiet = to prevent priting to terminal, except sequences or serious errors
+-x = input indexed reference transcriptome
+-1 = forward reads 
+-2 = reverse reads
+-S = output as SAM format (default output is stdout)
+
+------------------------
+### NOTE: This part is specific to the server we used and has no relation with aligning or the rna-seq pipeline. Everything can be run without this part of code.
+The script was run on the server using torque. #PBS are various flags that are needed by job batcher. 
+```
+#PBS -N HiSat2_transcripts_poa_annua
+#PBS -l nodes=1:ppn=70,mem=501gb
+#PBS -d /data/run/maheym/poa_annua
+#PBS -M maheymoh@msu.edu
+#PBS -m abe
+
+# Loading the modules
+module load HISAT2
+module load SAMTools
+```
+-N = name of the job \
+-l = numer of nodes, cpus and memory required \
+-d = working directory \
+-M = email id to get updates
+-m = abe means update, if the job is "a"borts,b"egins,"e"nd 
+
+installing HISAT2
+```
+conda install -c bioconda hisat2
+```
+--------------------------
+
+
+
+
+
 
 
 
