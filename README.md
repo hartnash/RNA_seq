@@ -143,6 +143,7 @@ samtools index /data/run/maheym/poa_annua/poa_transcripts/Poa.maker.transcripts_
 ```
 after converting SAM to BAM, we can remove SAM files to save space. We can always convert BAM to SAM or vice-versa. They are practically the same information, just SAM is in human readable form (text)  while BAM is in binary form. 
 
+# getting raw reads count 
 
 
 
