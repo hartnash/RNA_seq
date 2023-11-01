@@ -129,8 +129,8 @@ samtools view -hb -@ 35 Poa.maker.transcripts_${file}.sam | samtools sort -@ 35 
 ```
 
 view = flag to convert SAM to BAM \
--hb(to flags combined in one, similar to -h, -b) = -h = includes headers, -b - output as BAM \
-| = piping the ouput \
+-hb(two flags combined in one, similar to -h, -b), -h = includes headers, -b = output as BAM \
+| = piping the output \
 -@ = number of cores to use \
 -sort = sort the reads in BAM file \ 
 -o = output location for sorted BAM file
