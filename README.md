@@ -161,12 +161,153 @@ awk '{print $1, $3}' counts_${file}.txt > counts_reads_${file}.txt
 ```
 
 After you have the counts file in the txt form, you can combine all of them in excel to get combine_counts file, that can 
-be used as an input in the edgeR package to get Differentially expressed genes.
+be used as an input in the edgeR package to get Differentially expressed genes. Save it as .txt file that can be loaded in R later on.
+
+
+# Differential gene expression using EdgeR
+
+EdgeR is an R package that was used for the differential expression analysis for this study.
+
+Dissecting the code
+
+this code is to setting up the environment, working diectory and loading required packages
+
+```
+# code written by Sarah E. Holmes and modified by Mohit Mahey for DGE analysis
+
+# Clearing the environment 
+rm(list=ls())
+
+# Setting the working directory
+setwd("~/MSUREU/poa counts")
+
+# installing the package
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("edgeR")
+
+# loading required libraries
+library(edgeR)
+```
+
+we are loading the data in the R, and checking it if it loaded perfectly
+
+```
+# reading in the raw counts table
+x <- read.table("combines_counts.txt", header = TRUE, row.names = "GeneID", sep = '\t')
+
+# checking the counts file and its layout
+View(x)
+```
+
+the Diffential expression basically looks at same gene and how it is expressed in different treatments. It look at normalised counts of the reads that are 
+aligned to a particular gene and see the difference and give it back to us as logfoldchange. thus it means we need atleast 2 to make the comaparison.
+
+here we are making a group variable with just number, as they are going to be assigned to the treatment. I have 36 samples, in which i have 6 treatments (3 resistant
+and 3 susceptible) and i have 6 replicates for each. thus for my one group, i am assigning them number 1, for second group, it is number 2 and so on.
+```
+# this is when comparing each with each
+group <- factor(c(1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,5,5,5,5,5,5,6,6,6,6,6,6))
+```
+This function takes the counts and assign the groups according to the group variable we made above.
+
+
+```
+y <- DGEList(counts = x,group = group)
+y$samples
+
+```
+this is the filtering step, we are filtering the reads and removing very low counts
+```
+keep <- filterByExpr(y)
+summary(keep)
+table(keep)
+y <- y[keep, , keep.lib.sizes=FALSE]
+y$samples
+```
+
+here we are normalising against library size. 
+
+```
+y <- calcNormFactors(y)
+y$samples
+```
+
+now we are making a general design of how we can make the comparsions.
+```
+design <- model.matrix(~group-1, data = y$samples)
+design
+
+View(design)
+```
+
+now we are normalising, so that we don't get basied on diffeence in the libray sizes
+after that we are extimating dispersion. this function has to do with how EdgeR calculates the differential expression. 
+basically it calculates a median expression level based on dispersion and use that to calculte up or down regulation.
+
+```
+y <- calcNormFactors(y)
+y$samples
+
+
+y <- estimateDisp(y, design, robust = TRUE)
+y$common.dispersion
+
+fit <- glmQLFit(y, design, robust=TRUE)
+plotQLDisp(fit)
+```
+in this function, we are making the comparison. Here we are contrasting treatment 1 vs treatment 6.
+It will give a file with differentially expressed genes in treatment 1 vs treatment 6.
+
+
+```
+qlf.AllSvA <- glmQLFTest(fit, contrast = c(-1,0,0,0,0,1))
+write.table(qlf.AllSvA$table, "AllSvA.txt")
+```
 
 
 
+[EdgeR manual] (https://www.bioconductor.org/packages/devel/bioc/vignettes/edgeR/inst/doc/edgeRUsersGuide.pdf) 
 
+# General Help
 
+## how to make a loop in bash
+
+As we are doing RNA-seq analysis, making loops comes handy as we have multiple samples, with similar names and rather than doing command
+invidually for each sample, we can save time by automation
+
+Basic loop to use are "for" loops. here is an example
+
+```
+for file in s1 s2 s3;
+do
+   echo ${file}
+done
+```
+
+here is the explantion - 
+for - is the function
+file - it is like a place holder or variable that is going to be replaced by s1 s2 s3. it can be anything like "soft" "space" "phone" etc. 
+       it is just a place holder and a string that will be used to replace with actual file names.
+
+in - function 
+s1 s2 s3 - names that our variable will be replaced by, like  echo s1, echo s2, echo s3
+do - after this we can right the command to perform
+echo - a function that will do something. it returns back whatever is typed afterwards
+done - end of loop
+
+## path to file
+
+It is very comman that the command won;t run as it could not find the file. It could be due to you have to provide a full path to the file, 
+rather than just file name. 
+
+it can be found using 
+```
+realpath filename
+```
+
+it returns the full path to file, that can be used to put in the file to run the command.
 
 
 
