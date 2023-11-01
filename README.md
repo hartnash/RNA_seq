@@ -75,7 +75,7 @@ data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.cds = location of the 
 To run the aligner, we need
 a. cleaned forward reads (made in previous using fastp)
 b. cleaned reverse reads (made in previous using fastp)
-c. Indexed reference transcriptome to be aligned (if reference transcriptome is unavailable, consider using Trinity for de-novo assemby or Salmon, kallisto for transcript quantification without aligning)
+c. Indexed reference transcriptome to be aligned (if reference transcriptome is unavailable, consider using Trinity for de-novo assemby or Salmon, kallisto for transcript quantification using pseudo-alignment)
 
 ```
 hisat2 -p 70 --quiet \
