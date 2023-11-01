@@ -145,6 +145,25 @@ after converting SAM to BAM, we can remove SAM files to save space. We can alway
 
 # getting raw reads count 
 
+After converting the SAM to BAM files, we can extract the number of the reads mapped for each transcript. 
+To view the details we can use SAMTools
+
+```
+samtools idxstats Poa.maker.transcripts_${file}.bam > counts_${file}.txt
+```
+this gives you a file with transcripts name, sequence length, mapped reads number and unmapped reads number
+for more information, see [samtools idxtstat](https://www.htslib.org/doc/samtools-idxstats.html)
+
+you can parse it out using awk to get only transcripts name and mapped reads number only as thats only you need for the DGE analysis
+
+```
+awk '{print $1, $3}' counts_${file}.txt > counts_reads_${file}.txt
+```
+
+After you have the counts file in the txt form, you can combine all of them in excel to get combine_counts file, that can 
+be used as an input in the edgeR package to get Differentially expressed genes.
+
+
 
 
 
