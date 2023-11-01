@@ -168,7 +168,7 @@ be used as an input in the edgeR package to get Differentially expressed genes. 
 
 EdgeR is an R package that was used for the differential expression analysis for this study.
 
-Dissecting the code
+## Dissecting the code
 
 this code is to setting up the environment, working diectory and loading required packages
 
