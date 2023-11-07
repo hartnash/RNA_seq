@@ -6,21 +6,21 @@ Differential gene expression is a technique used to find the up- and down-regula
 Here, we have 6 populations in which 3 are resistant and 3 are susceptible to the herbicide indaziflam
 
 # Tools used 
-1.fastp - for removing adapter sequences and quality check of raw fastq files
+1. fastp - for removing adapter sequences and quality check of raw fastq files
 Shifu Chen, Yanqing Zhou, Yaru Chen, Jia Gu; fastp: an ultra-fast all-in-one FASTQ preprocessor, Bioinformatics, Volume 34, Issue 17, 1 September 2018, Pages i884–i890, https://doi.org/10.1093/bioinformatics/bty560
 
-2.Hisat2 - for aligning the raw reads to the genome
+2. Hisat2 - for aligning the raw reads to the genome
 (Kim, D., Paggi, J.M., Park, C. et al. Graph-based genome alignment and genotyping with HISAT2 and HISAT-genotype. Nat Biotechnol 37, 907–915 (2019)
 
-3.SAMTools - for converting and handling SAM/BAM files
+3. SAMTools - for converting and handling SAM/BAM files
 (Heng Li and others, The Sequence Alignment/Map format and SAMtools, Bioinformatics, Volume 25, Issue 16, August 2009, Pages 2078–2079, https://doi.org/10.1093/bioinformatics/btp352)
 
-4.EdgeR - for making comparisons between different populations and getting differentially expressed genes.
+4. EdgeR - for making comparisons between different populations and getting differentially expressed genes.
 http://bioconductor.org/packages/devel/bioc/vignettes/edgeR/inst/doc/edgeRUsersGuide.pdf
 
 # Procedure
 
-# 1. - Trimming and filtering raw reads
+# 1 - Trimming and filtering raw reads
 fastp is a command-line tool that can trim the adapter sequences, filter low quality reads and provide quality control files for the raw reads. it provides the quality control files in html and json format, to see the quality of the sequences.
 
 ## To install fastp
@@ -55,7 +55,7 @@ fastp -i ${file}_R1.fastq.gz  -I ${file}_R2.fastq.gz -o ${data}/cleaned_files/${
 
 for more information, see [fastp github page](https://github.com/OpenGene/fastp)
 
-# 2 Aligning the raw reads 
+# 2 - Aligning the raw reads 
 After initial filtering, trimming, and quality control of the raw reads, the next step is to align the raw reads. We used HISAT2 to align the raw reads to the reference transcriptome.
 
 ## Building the genome index
@@ -118,8 +118,8 @@ conda install -c bioconda hisat2
 ```
 --------------------------
 
-# 3 Sorting and indexing aligned SAM outputs
-After aligning with HISAT2, the reads are un-sorted. The reads needs to be sorted for downward analysis. after sorting the reads needs to be indexed. The indexing is process of getting the position of the reads in alignment file. Due to large size of the files, indexing helps the softwares to run faster and efficiently. SAM files can go upto 50GB per file, depending on size of your transcriptome. Thus it is better to convert SAM (sequence alignment mapping) to BAM (binary alignement mapping) to save space and run downward analysis faster.
+# 3 - Sorting and indexing aligned SAM outputs
+After aligning with HISAT2, the reads are un-sorted. The reads need to be sorted for downward analysis. after sorting the reads needs to be indexed. The indexing is the process of getting the position of the reads in the alignment file. Due to the large size of the files, indexing helps the software to run faster and more efficiently. SAM files can go up to 50GB per file, depending on size of your transcriptome. Thus it is better to convert SAM (sequence alignment mapping) to BAM (binary alignement mapping) to save space and run a downward analysis faster.
 
 ## Converting SAM to BAM and sorting the BAM files
 
@@ -141,7 +141,7 @@ After sorting we can index the BAM files.
 samtools index /data/run/maheym/poa_annua/poa_transcripts/Poa.maker.transcripts_${file}.bam
         rm Poa.maker.transcripts_${file}.sam
 ```
-after converting SAM to BAM, we can remove SAM files to save space. We can always convert BAM to SAM or vice-versa. They are practically the same information, just SAM is in human readable form (text)  while BAM is in binary form. 
+after converting SAM to BAM, we can remove SAM files to save space. We can always convert BAM to SAM or vice-versa. They are practically the same information, just SAM is in human-readable form (text)  while BAM is in binary form. 
 
 # getting raw reads count 
 
