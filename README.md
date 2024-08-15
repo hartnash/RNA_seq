@@ -1,5 +1,5 @@
 # RNA_seq
-Differential gene expression analysis done on the resistant and susceptible populations of poa annua
+Differential gene expression analysis done on the resistant and susceptible populations of Amb annua
 
 # Differential gene expression analysis pipeline 
 Differential gene expression is a technique used to find the up- and down-regulated genes in their expression in an experimental design.
@@ -63,13 +63,13 @@ Before running the alignment, hisat needs trancriptome to be indexed.
 
 ```
 # Building the trancriptome index 
-hisat2-build -p 64 data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.cds \
-/data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.index 
+hisat2-build -p 64 data/run/hartnash/ambrosia_artemisiifolia/ambrosia_artemisiifolia_cds_index/Ambar.maker.cds \
+/data/run/hartnash/ambrosia_artemisiifolia/ambrosia_artemisiifolia_cds_index/Ambar.maker.index 
 ```
 where
 -p = number of cores to use \
-data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.cds = location of the trancriptome sequence \
-/data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.index = location and name of indexed transcriptome to be used for alignment
+data/run/hartnash/ambrosia_artemisiifolia/ambrosia_artemisiifolia_cds_index/Ambar.maker.cds = location of the trancriptome sequence \
+/data/run/hartnash/ambrosia_artemisiifolia/ambrosia_artemisiifolia_cds_index/Ambar.maker.index = location and name of indexed transcriptome to be used for alignment
 
 ## running the Hisat2 aligner
 To run the aligner, we need
@@ -79,10 +79,10 @@ c. Indexed reference transcriptome to be aligned (if reference transcriptome is 
 
 ```
 hisat2 -p 70 --quiet \
-               -x /data/run/maheym/poa_annua/poa_annua_cds_index/PoaAn.maker.index \
-               -1 /data/run/maheym/poa_annua/raw_data/${file}_1.fq.gz \
-               -2 /data/run/maheym/poa_annua/raw_data/${file}_2.fq.gz \
-               -S /data/run/maheym/poa_annua/Poa.maker.transcripts_${file}.sam
+               -x /data/run/hartnash/ambrosia_artemisiifolia/ambrosia_artemisiifolia_cds_index/Ambar.maker.index \
+               -1 /data/run/hartnash/ambrosia_artemisiifolia/raw_data/${file}_1.fq.gz \
+               -2 /data/run/hartnash/ambrosia_artemisiifolia/raw_data/${file}_2.fq.gz \
+               -S /data/run/hartnash/ambrosia_artemisiifolia/Amb.maker.transcripts_${file}.sam
 ```
 where
 -p = number of cores to use
@@ -96,10 +96,10 @@ where
 ### NOTE: This part is specific to the server we used and has no relation with aligning or the rna-seq pipeline. Everything can be run without this part of code.
 The script was run on the server using torque. #PBS are various flags that are needed by job batcher. 
 ```
-#PBS -N HiSat2_transcripts_poa_annua
+#PBS -N HiSat2_transcripts_ambrosia_artemisiifolia
 #PBS -l nodes=1:ppn=70,mem=501gb
-#PBS -d /data/run/maheym/poa_annua
-#PBS -M maheymoh@msu.edu
+#PBS -d /data/run/hartnash/ambrosia_artemisiifolia
+#PBS -M hartnashoh@msu.edu
 #PBS -m abe
 
 # Loading the modules
@@ -124,8 +124,8 @@ After aligning with HISAT2, the reads are un-sorted. The reads need to be sorted
 ## Converting SAM to BAM and sorting the BAM files
 
 ```
-samtools view -hb -@ 35 Poa.maker.transcripts_${file}.sam | samtools sort -@ 35 \
-         -o /data/run/maheym/poa_annua/poa_transcripts/Poa.maker.transcripts_${file}.bam
+samtools view -hb -@ 35 Amb.maker.transcripts_${file}.sam | samtools sort -@ 35 \
+         -o /data/run/hartnash/ambrosia_artemisiifolia/Amb_transcripts/Amb.maker.transcripts_${file}.bam
 ```
 
 view = flag to convert SAM to BAM \
@@ -138,8 +138,8 @@ view = flag to convert SAM to BAM \
 ## Indexing the BAM files
 After sorting we can index the BAM files. 
 ```
-samtools index /data/run/maheym/poa_annua/poa_transcripts/Poa.maker.transcripts_${file}.bam
-        rm Poa.maker.transcripts_${file}.sam
+samtools index /data/run/hartnash/ambrosia_artemisiifolia/Amb_transcripts/Amb.maker.transcripts_${file}.bam
+        rm Amb.maker.transcripts_${file}.sam
 ```
 after converting SAM to BAM, we can remove SAM files to save space. We can always convert BAM to SAM or vice-versa. They are practically the same information, just SAM is in human-readable form (text)  while BAM is in binary form. 
 
@@ -149,7 +149,7 @@ After converting the SAM to BAM files, we can extract the number of the reads ma
 To view the details we can use SAMTools
 
 ```
-samtools idxstats Poa.maker.transcripts_${file}.bam > counts_${file}.txt
+samtools idxstats Amb.maker.transcripts_${file}.bam > counts_${file}.txt
 ```
 this gives you a file with transcripts name, sequence length, mapped reads number and unmapped reads number
 for more information, see [samtools idxtstat](https://www.htslib.org/doc/samtools-idxstats.html)
@@ -179,7 +179,7 @@ this code is to setting up the environment, working diectory and loading require
 rm(list=ls())
 
 # Setting the working directory
-setwd("~/MSUREU/poa counts")
+setwd("~/MSUREU/Amb counts")
 
 # installing the package
 if (!require("BiocManager", quietly = TRUE))
